@@ -1,0 +1,76 @@
+<div class="container mt-4">
+  <h2>📋 Gestión de Solicitudes</h2>
+  
+  <!-- FORMULARIO NUEVA SOLICITUD -->
+  <div class="card mb-4">
+    <div class="card-header">
+      <h5>➕ Nueva Solicitud</h5>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-3">
+          <input [(ngModel)]="nombreCliente" class="form-control mb-2" placeholder="Nombre del cliente">
+        </div>
+        <div class="col-md-3">
+          <input [(ngModel)]="documentoCliente" class="form-control mb-2" placeholder="Documento">
+        </div>
+        <div class="col-md-2">
+          <input [(ngModel)]="monto" type="number" class="form-control mb-2" placeholder="Monto $">
+        </div>
+        <div class="col-md-2">
+          <select [(ngModel)]="productoSeleccionado" class="form-control mb-2">
+            <option [ngValue]="null" disabled>-- Producto --</option>
+            <option *ngFor="let p of productos" [ngValue]="p.id">{{p.nombre}}</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button (click)="crearSolicitud()" class="btn btn-success w-100">💾 Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABLA SOLICITUDES -->
+  <div class="card">
+    <div class="card-header">
+      <h5>📊 Lista Solicitudes ({{solicitudes.length}})</h5>
+    </div>
+    <div class="card-body">
+      <table class="table table-striped" *ngIf="solicitudes.length > 0">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Documento</th>
+            <th>Producto</th>
+            <th>Monto</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let sol of solicitudes">
+            <td>{{sol.id}}</td>
+            <td>{{sol.cliente.nombre}}</td>
+            <td>{{sol.cliente.documento}}</td>
+            <td>{{sol.productoCredito.nombre}}</td>
+            <td>${{sol.montoSolicitado | number:'1.0-0'}}</td>
+            <td>
+              <span class="badge" [ngClass]="sol.estado === 'ACTIVO' ? 'bg-warning' : sol.estado === 'FINALIZADO' ? 'bg-success' : 'bg-info'">
+                {{sol.estado}}
+              </span>
+            </td>
+            <td>
+              <button *ngIf="sol.estado === 'ACTIVO'" (click)="finalizarSolicitud(sol.id)" class="btn btn-success btn-sm me-1">✅ Finalizar</button>
+              <button (click)="eliminarSolicitud(sol.id)" class="btn btn-danger btn-sm">🗑️ Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div *ngIf="solicitudes.length === 0" class="text-center p-5">
+        <h5>📭 No hay solicitudes</h5>
+        <p>💡 Crea la primera solicitud arriba</p>
+      </div>
+    </div>
+  </div>
+</div>

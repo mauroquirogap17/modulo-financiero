@@ -1,0 +1,79 @@
+<div class="container mt-4">
+  <h2>📦 Catálogo de Productos de Crédito</h2>
+
+  <!-- FORMULARIO NUEVO PRODUCTO -->
+  <div class="card mb-4">
+    <div class="card-header">
+      <h5>➕ Nuevo Producto</h5>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-3">
+          <input [(ngModel)]="nuevoNombre" class="form-control mb-2" placeholder="Nombre del producto">
+        </div>
+        <div class="col-md-3">
+          <input [(ngModel)]="nuevaDescripcion" class="form-control mb-2" placeholder="Descripción">
+        </div>
+        <div class="col-md-2">
+          <select [(ngModel)]="nuevaCategoria" class="form-control mb-2">
+            <option [ngValue]="null" disabled>-- Categoría --</option>
+            <option value="BASICA">BASICA</option>
+            <option value="AVANZADA">AVANZADA</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <select [(ngModel)]="analistaSeleccionado" class="form-control mb-2">
+            <option [ngValue]="null" disabled>-- Analista --</option>
+            <option *ngFor="let a of analistas" [ngValue]="a.id">{{a.nombre}}</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button (click)="crearProducto()" class="btn btn-success w-100">💾 Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABLA PRODUCTOS -->
+  <div class="card">
+    <div class="card-header">
+      <h5>📊 Productos Registrados ({{productos.length}})</h5>
+    </div>
+    <div class="card-body">
+      <table class="table table-striped" *ngIf="productos.length > 0">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Categoría</th>
+            <th>Analista Responsable</th>
+            <th>Plazo</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of productos">
+            <td>{{p.id}}</td>
+            <td>{{p.nombre}}</td>
+            <td>{{p.descripcion}}</td>
+            <td>
+              <span class="badge" [ngClass]="p.categoria === 'BASICA' ? 'bg-info' : 'bg-primary'">
+                {{p.categoria}}
+              </span>
+            </td>
+            <td>{{p.analista?.nombre || 'Sin asignar'}}</td>
+            <td>{{p.plazoAnios}} años</td>
+            <td>
+              <button (click)="eliminarProducto(p.id)" class="btn btn-danger btn-sm">🗑️ Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div *ngIf="productos.length === 0" class="text-center p-5">
+        <h5>📭 No hay productos registrados</h5>
+        <p>💡 Registra el primer producto arriba</p>
+      </div>
+    </div>
+  </div>
+</div>
